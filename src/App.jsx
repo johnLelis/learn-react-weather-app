@@ -4,6 +4,7 @@ import Preferences from './components/Preferences';
 import RecentSearches from './components/RecentSearches';
 import WeatherDisplay from './components/WeatherDisplay';
 import dayjs from 'dayjs';
+import Forecast from './components/Forecast';
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const API_BASE_URL = 'https://api.weatherapi.com/v1/';
 const App = () => {
@@ -33,14 +34,13 @@ const App = () => {
     setIsButtonClicked(true);
 
     try {
-      const today = dayjs().format('YYYY-MM-DD');
       const fetchWeather = await axios.get(`${API_BASE_URL}/forecast.json`, {
         params: {
           q: searchTerm,
-          days: 5,
+          days: 6,
           key: WEATHER_API_KEY,
-          dt: today,
           aqi: 'no',
+          hour: 24,
         },
       });
 
@@ -126,8 +126,11 @@ const App = () => {
     }));
   };
 
+  const today = dayjs().format('dddd, MMM DD YYYY');
+
   return (
     <div className="dashboard">
+      <p className="date">{today}</p>
       <div className="header">
         <h1>Weather Dashboard</h1>
         <p>Get real-time weather information for any city worldwide</p>
@@ -187,85 +190,15 @@ const App = () => {
               weather={weather}
               prefferedTemperatureUnit={prefferedTemperatureUnit}
             />
+
+            <Forecast />
+            <pre>{JSON.stringify(weather, null, 2)}</pre>
           </>
         )
       )}
 
       {/* 
-      <div className="weather-display" id="weatherDisplay">
-        <div className="current-weather">
-          <div className="content">
-            <div className="location" id="currentLocation">
-              London, UK
-            </div>
-            <div className="temperature" id="currentTemp">
-              22°C
-            </div>
-            <div className="description" id="currentDesc">
-              Partly Cloudy
-            </div>
-
-            <div className="weather-details">
-              <div className="detail-item">
-                <div className="detail-label">Feels Like</div>
-                <div className="detail-value" id="feelsLike">
-                  25°C
-                </div>
-              </div>
-              <div className="detail-item">
-                <div className="detail-label">Humidity</div>
-                <div className="detail-value" id="humidity">
-                  65%
-                </div>
-              </div>
-              <div className="detail-item">
-                <div className="detail-label">Wind Speed</div>
-                <div className="detail-value" id="windSpeed">
-                  12 km/h
-                </div>
-              </div>
-              <div className="detail-item">
-                <div className="detail-label">Pressure</div>
-                <div className="detail-value" id="pressure">
-                  1013 hPa
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="forecast-section">
-          <h3 className="forecast-title">5-Day Forecast</h3>
-          <div className="forecast-grid" id="forecastGrid">
-            <div className="forecast-item">
-              <div className="forecast-day">Tomorrow</div>
-              <div className="forecast-temp">24°C / 16°C</div>
-              <div className="forecast-desc">Sunny</div>
-            </div>
-            <div className="forecast-item">
-              <div className="forecast-day">Tuesday</div>
-              <div className="forecast-temp">21°C / 14°C</div>
-              <div className="forecast-desc">Rainy</div>
-            </div>
-            <div className="forecast-item">
-              <div className="forecast-day">Wednesday</div>
-              <div className="forecast-temp">26°C / 18°C</div>
-              <div className="forecast-desc">Cloudy</div>
-            </div>
-            <div className="forecast-item">
-              <div className="forecast-day">Thursday</div>
-              <div className="forecast-temp">23°C / 15°C</div>
-              <div className="forecast-desc">Partly Cloudy</div>
-            </div>
-            <div className="forecast-item">
-              <div className="forecast-day">Friday</div>
-              <div className="forecast-temp">28°C / 19°C</div>
-              <div className="forecast-desc">Sunny</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      
       <div className="calculations-section">
         <h3 className="calculations-title">Weather Calculations</h3>
         <div className="calculations-grid">

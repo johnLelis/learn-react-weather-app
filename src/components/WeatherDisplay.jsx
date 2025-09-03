@@ -8,7 +8,7 @@ const WeatherDisplay = ({
   weather: { location, current },
   prefferedTemperatureUnit,
 }) => {
-  const temperatureInCelsius = current.temp_c;
+  const temperatureInCelsius = current?.temp_c;
   const temperatureUnit = getTemperatureUnit(prefferedTemperatureUnit);
 
   const convertedTemperature = convertTemperature(
@@ -16,6 +16,12 @@ const WeatherDisplay = ({
     prefferedTemperatureUnit
   );
   const temperature = `${convertedTemperature} ${temperatureUnit}`;
+  const feelsLikeInCelcius = current?.feelslike_c;
+  const convertedFeelsLike = convertTemperature(
+    feelsLikeInCelcius,
+    prefferedTemperatureUnit
+  );
+  const feelsLike = `${convertedFeelsLike} ${temperatureUnit}`;
   return (
     <div className="weather-display" id="weatherDisplay">
       <div className="current-weather">
@@ -25,7 +31,7 @@ const WeatherDisplay = ({
             current={current}
             temperature={temperature}
           />
-          <WeatherDetails current={current} />
+          <WeatherDetails current={current} feelsLike={feelsLike} />
         </div>
       </div>
     </div>

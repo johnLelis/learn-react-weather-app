@@ -23,10 +23,9 @@ const temperatureConverters = {
 };
 
 export const convertTemperature = (celsius, scale) => {
-  console.log(JSON.stringify(scale, null, 2));
   const converter = temperatureConverters[scale.toLowerCase()];
   if (!converter) {
     return celsius;
   }
-  return converter(celsius);
+  return converter(celsius).toFixed(2);
 };

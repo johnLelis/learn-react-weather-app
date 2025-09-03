@@ -7,7 +7,6 @@ const CurrentWeather = ({
 }) => {
   return (
     <>
-      {/* <h1>{temperatureUnit}</h1> */}
       <div className="location">
         <div>{`${name} - ${region}`}</div>
         <p>{country}</p>

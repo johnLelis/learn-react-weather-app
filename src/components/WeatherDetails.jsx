@@ -1,12 +1,12 @@
 const WeatherDetails = ({
-  current: { feelslike_c, humidity, wind_kph, pressure_mb },
-  temperatureUnit = '°C',
+  current: { humidity, wind_kph, pressure_mb },
+  feelsLike,
 }) => {
   return (
     <div className="weather-details">
       <div className="detail-item">
         <div className="detail-label">Feels Like</div>
-        <div className="detail-value">{`${feelslike_c}${temperatureUnit}`}</div>
+        <div className="detail-value">{feelsLike}</div>
       </div>
       <div className="detail-item">
         <div className="detail-label">Humidity</div>

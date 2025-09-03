@@ -3,6 +3,7 @@ import axios from 'axios';
 import Preferences from './components/Preferences';
 import RecentSearches from './components/RecentSearches';
 import WeatherDisplay from './components/WeatherDisplay';
+import dayjs from 'dayjs';
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const API_BASE_URL = 'https://api.weatherapi.com/v1/';
 const App = () => {
@@ -18,29 +19,36 @@ const App = () => {
     return setSearch(e.target.value);
   };
 
-  const handleOnClick = async () => {
-    if (!search.trim()) {
+  const fetchWeatherData = async searchTerm => {
+    if (!searchTerm.trim()) {
       setWeather(null);
       setIsButtonClicked(false);
       return;
     }
+
     setSearchHistory(prevState =>
-      prevState.includes(search) ? prevState : [search, ...prevState]
+      prevState.includes(searchTerm) ? prevState : [searchTerm, ...prevState]
     );
     setIsLoading(true);
     setIsButtonClicked(true);
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/current.json?q=${encodeURIComponent(
-          search
-        )}&key=${WEATHER_API_KEY}`
-      );
 
-      if (res?.status !== 200) {
+    try {
+      const today = dayjs().format('YYYY-MM-DD');
+      const fetchWeather = await axios.get(`${API_BASE_URL}/forecast.json`, {
+        params: {
+          q: searchTerm,
+          days: 5,
+          key: WEATHER_API_KEY,
+          dt: today,
+          aqi: 'no',
+        },
+      });
+
+      if (fetchWeather?.status !== 200) {
         throw new Error('Failed to fetch weather.');
       }
 
-      setWeather(res.data || []);
+      setWeather(fetchWeather.data || []);
       setErrorMessage(null);
     } catch (error) {
       console.error('Error fetching weather:', error);
@@ -51,9 +59,17 @@ const App = () => {
     }
   };
 
+  const handleOnClick = async () => {
+    await fetchWeatherData(search);
+  };
+
+  const handleRecentSearchClick = async searchTerm => {
+    setSearch(searchTerm);
+    await fetchWeatherData(searchTerm);
+  };
+
   useEffect(() => {
     if (!search.trim()) {
-      setWeather(null);
       setIsButtonClicked(false);
       setErrorMessage(null);
     }
@@ -119,6 +135,7 @@ const App = () => {
 
       <div className="search-section">
         <input
+          name="search"
           type="text"
           className="search-input"
           placeholder="Enter city name..."
@@ -152,7 +169,10 @@ const App = () => {
         ))}
       </div>
 
-      <RecentSearches searchHistory={searchHistory} />
+      <RecentSearches
+        searchHistory={searchHistory}
+        onRecentSearchClick={handleRecentSearchClick}
+      />
 
       <div className={`error-message ${!errorMessage && 'hidden'}`}>
         {errorMessage}

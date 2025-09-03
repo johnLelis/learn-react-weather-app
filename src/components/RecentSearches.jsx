@@ -1,4 +1,4 @@
-const RecentSearches = ({ searchHistory = [], onSearch }) => {
+const RecentSearches = ({ searchHistory = [], onRecentSearchClick }) => {
   return (
     <div className="previous-searches">
       <h3 className="searches-title">Recent Searches</h3>
@@ -8,7 +8,7 @@ const RecentSearches = ({ searchHistory = [], onSearch }) => {
             <span
               key={index}
               className="search-tag"
-              onClick={() => onSearch(history)}
+              onClick={() => onRecentSearchClick(history)}
             >
               {capitalizeFirstLetter(history)}
             </span>

@@ -1,0 +1,35 @@
+import CurrentWeather from './CurrentWeather';
+import WeatherDetails from './WeatherDetails';
+import {
+  getTemperatureUnit,
+  convertTemperature,
+} from '../utils/temperatureUtils';
+const WeatherDisplay = ({
+  weather: { location, current },
+  prefferedTemperatureUnit,
+}) => {
+  const temperatureInCelsius = current.temp_c;
+  const temperatureUnit = getTemperatureUnit(prefferedTemperatureUnit);
+
+  const convertedTemperature = convertTemperature(
+    temperatureInCelsius,
+    prefferedTemperatureUnit
+  );
+  const temperature = `${convertedTemperature} ${temperatureUnit}`;
+  return (
+    <div className="weather-display" id="weatherDisplay">
+      <div className="current-weather">
+        <div className="content">
+          <CurrentWeather
+            location={location}
+            current={current}
+            temperature={temperature}
+          />
+          <WeatherDetails current={current} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WeatherDisplay;

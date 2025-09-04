@@ -242,13 +242,7 @@ const App = () => {
           </div>
         </div>
       </div>
-
-      <div className="empty-state hidden" id="emptyState">
-        <h3>Welcome to Weather Dashboard</h3>
-        <p>
-          Search for a city to get started with real-time weather information
-        </p>
-      </div> */}
+       */}
     </div>
   );
 };

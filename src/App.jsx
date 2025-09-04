@@ -203,12 +203,14 @@ const App = () => {
           />
         ))}
       </div>
-      <div ref={recentSearchRef}>
-        <RecentSearches
-          searchHistory={searchHistory}
-          onRecentSearchClick={handleRecentSearchClick}
-        />
-      </div>
+      {searchHistory.length > 0 && (
+        <div ref={recentSearchRef}>
+          <RecentSearches
+            searchHistory={searchHistory}
+            onRecentSearchClick={handleRecentSearchClick}
+          />
+        </div>
+      )}
 
       <div className={`error-message ${!errorMessage && 'hidden'}`}>
         {errorMessage}

@@ -22,10 +22,12 @@ const temperatureConverters = {
   fahrenheit: celsius => (celsius * 9) / 5 + 32,
 };
 
-export const convertTemperature = (celsius, scale) => {
+export const convertTemperature = (celsius, scale, decimalPlaces = 0) => {
   const converter = temperatureConverters[scale.toLowerCase()];
   if (!converter) {
-    return celsius;
+    return decimalPlaces > 0
+      ? celsius.toFixed(decimalPlaces)
+      : celsius.toFixed();
   }
-  return converter(celsius).toFixed(2);
+  return converter(celsius).toFixed(decimalPlaces);
 };

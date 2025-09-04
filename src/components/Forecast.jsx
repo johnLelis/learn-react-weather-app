@@ -1,36 +1,58 @@
-import React from 'react';
+import {
+  getTemperatureUnit,
+  convertTemperature,
+} from '../utils/temperatureUtils';
 
-const Forecast = () => {
+import { getWeekdayName, isTomorrow, isToday } from '../utils/dateUtils';
+const Forecast = ({
+  weather: {
+    forecast: { forecastday },
+  },
+  prefferedTemperatureUnit,
+}) => {
+  const temperatureUnit = getTemperatureUnit(prefferedTemperatureUnit);
   return (
     <div>
       <div className="forecast-section">
         <h3 className="forecast-title">5-Day Forecast</h3>
         <div className="forecast-grid" id="forecastGrid">
-          <div className="forecast-item">
-            <div className="forecast-day">Tomorrow</div>
-            <div className="forecast-temp">24°C / 16°C</div>
-            <div className="forecast-desc">Sunny</div>
-          </div>
-          <div className="forecast-item">
-            <div className="forecast-day">Tuesday</div>
-            <div className="forecast-temp">21°C / 14°C</div>
-            <div className="forecast-desc">Rainy</div>
-          </div>
-          <div className="forecast-item">
-            <div className="forecast-day">Wednesday</div>
-            <div className="forecast-temp">26°C / 18°C</div>
-            <div className="forecast-desc">Cloudy</div>
-          </div>
-          <div className="forecast-item">
-            <div className="forecast-day">Thursday</div>
-            <div className="forecast-temp">23°C / 15°C</div>
-            <div className="forecast-desc">Partly Cloudy</div>
-          </div>
-          <div className="forecast-item">
-            <div className="forecast-day">Friday</div>
-            <div className="forecast-temp">28°C / 19°C</div>
-            <div className="forecast-desc">Sunny</div>
-          </div>
+          {forecastday.length > 0 &&
+            forecastday.map(
+              (
+                {
+                  date,
+                  day: {
+                    maxtemp_c,
+                    mintemp_c,
+                    condition: { text },
+                  },
+                },
+                index
+              ) => {
+                if (isToday(date)) return;
+                const convertedMaxTemp = convertTemperature(
+                  maxtemp_c,
+                  prefferedTemperatureUnit
+                );
+
+                const convertedMinTemp = convertTemperature(
+                  mintemp_c,
+                  prefferedTemperatureUnit
+                );
+                return (
+                  <div key={index} className="forecast-item">
+                    <div className="forecast-day">
+                      {isTomorrow(date) ? 'Tomorrow' : getWeekdayName(date)}
+                    </div>
+                    <div className="forecast-temp">
+                      {`${convertedMaxTemp} ${temperatureUnit} /
+                        ${convertedMinTemp} ${temperatureUnit}`}
+                    </div>
+                    <div className="forecast-desc">{text}</div>
+                  </div>
+                );
+              }
+            )}
         </div>
       </div>
     </div>

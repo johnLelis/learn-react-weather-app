@@ -191,8 +191,10 @@ const App = () => {
               prefferedTemperatureUnit={prefferedTemperatureUnit}
             />
 
-            <Forecast />
-            <pre>{JSON.stringify(weather, null, 2)}</pre>
+            <Forecast
+              weather={weather}
+              prefferedTemperatureUnit={prefferedTemperatureUnit}
+            />
           </>
         )
       )}

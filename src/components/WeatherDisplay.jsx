@@ -13,13 +13,15 @@ const WeatherDisplay = ({
 
   const convertedTemperature = convertTemperature(
     temperatureInCelsius,
-    prefferedTemperatureUnit
+    prefferedTemperatureUnit,
+    2
   );
   const temperature = `${convertedTemperature} ${temperatureUnit}`;
   const feelsLikeInCelcius = current?.feelslike_c;
   const convertedFeelsLike = convertTemperature(
     feelsLikeInCelcius,
-    prefferedTemperatureUnit
+    prefferedTemperatureUnit,
+    2
   );
   const feelsLike = `${convertedFeelsLike} ${temperatureUnit}`;
   return (

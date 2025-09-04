@@ -5,6 +5,7 @@ import RecentSearches from './components/RecentSearches';
 import WeatherDisplay from './components/WeatherDisplay';
 import dayjs from 'dayjs';
 import Forecast from './components/Forecast';
+import WeatherCalculations from './components/WeatherCalculations';
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const API_BASE_URL = 'https://api.weatherapi.com/v1/';
 const App = () => {
@@ -39,7 +40,7 @@ const App = () => {
           q: searchTerm,
           days: 6,
           key: WEATHER_API_KEY,
-          aqi: 'no',
+          aqi: 'yes',
           hour: 24,
         },
       });
@@ -66,6 +67,10 @@ const App = () => {
   const handleRecentSearchClick = async searchTerm => {
     setSearch(searchTerm);
     await fetchWeatherData(searchTerm);
+    setTimeout(() => {
+      recentSearchRef.current?.scrollIntoView({ behavior: 'smooth' });
+      recentSearchRef.current?.focus();
+    }, 100);
   };
 
   useEffect(() => {
@@ -76,12 +81,20 @@ const App = () => {
   }, [search]);
 
   const inputRef = useRef(null);
-
+  const recentSearchRef = useRef(null);
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   const userOptions = [
+    {
+      label: 'Theme',
+      controlId: 'theme',
+      options: [
+        { value: 'light', placeholder: 'Light' },
+        { value: 'dark', placeholder: 'Dark' },
+      ],
+    },
     {
       label: 'Temperature',
       controlId: 'tempUnit',
@@ -89,14 +102,6 @@ const App = () => {
         { value: 'celcius', placeholder: 'Celsius (°C)' },
         { value: 'fahrenheit', placeholder: 'Fahrenheit (°F)' },
         { value: 'kelvin', placeholder: 'Kelvin (K)' },
-      ],
-    },
-    {
-      label: 'Theme',
-      controlId: 'theme',
-      options: [
-        { value: 'light', placeholder: 'Light' },
-        { value: 'dark', placeholder: 'Dark' },
       ],
     },
     {
@@ -129,7 +134,7 @@ const App = () => {
   const today = dayjs().format('dddd, MMM DD YYYY');
 
   return (
-    <div className="dashboard">
+    <div className={`dashboard ${preferences.theme === 'dark' && 'dark-mode'}`}>
       <p className="date">{today}</p>
       <div className="header">
         <h1>Weather Dashboard</h1>
@@ -171,11 +176,12 @@ const App = () => {
           />
         ))}
       </div>
-
-      <RecentSearches
-        searchHistory={searchHistory}
-        onRecentSearchClick={handleRecentSearchClick}
-      />
+      <div ref={recentSearchRef}>
+        <RecentSearches
+          searchHistory={searchHistory}
+          onRecentSearchClick={handleRecentSearchClick}
+        />
+      </div>
 
       <div className={`error-message ${!errorMessage && 'hidden'}`}>
         {errorMessage}
@@ -186,63 +192,21 @@ const App = () => {
       ) : (
         weather && (
           <>
-            <WeatherDisplay
-              weather={weather}
-              prefferedTemperatureUnit={prefferedTemperatureUnit}
-            />
+            <div className="weather-display" id="weatherDisplay">
+              <WeatherDisplay
+                weather={weather}
+                tempUnit={prefferedTemperatureUnit}
+              />
 
-            <Forecast
+              <Forecast weather={weather} tempUnit={prefferedTemperatureUnit} />
+            </div>
+            <WeatherCalculations
               weather={weather}
-              prefferedTemperatureUnit={prefferedTemperatureUnit}
+              tempUnit={prefferedTemperatureUnit}
             />
           </>
         )
       )}
-
-      {/* 
-      
-      <div className="calculations-section">
-        <h3 className="calculations-title">Weather Calculations</h3>
-        <div className="calculations-grid">
-          <div className="calculation-item">
-            <div className="calc-label">Heat Index</div>
-            <div className="calc-value" id="heatIndex">
-              26°C
-            </div>
-          </div>
-          <div className="calculation-item">
-            <div className="calc-label">Dew Point</div>
-            <div className="calc-value" id="dewPoint">
-              18°C
-            </div>
-          </div>
-          <div className="calculation-item">
-            <div className="calc-label">Wind Chill</div>
-            <div className="calc-value" id="windChill">
-              20°C
-            </div>
-          </div>
-          <div className="calculation-item">
-            <div className="calc-label">UV Index</div>
-            <div className="calc-value" id="uvIndex">
-              Moderate (5)
-            </div>
-          </div>
-          <div className="calculation-item">
-            <div className="calc-label">Air Quality</div>
-            <div className="calc-value" id="airQuality">
-              Good (42)
-            </div>
-          </div>
-          <div className="calculation-item">
-            <div className="calc-label">Visibility</div>
-            <div className="calc-value" id="visibility">
-              10 km
-            </div>
-          </div>
-        </div>
-      </div>
-       */}
     </div>
   );
 };

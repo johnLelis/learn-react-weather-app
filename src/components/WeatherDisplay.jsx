@@ -1,40 +1,31 @@
 import CurrentWeather from './CurrentWeather';
 import WeatherDetails from './WeatherDetails';
-import {
-  getTemperatureUnit,
-  convertTemperature,
-} from '../utils/temperatureUtils';
-const WeatherDisplay = ({
-  weather: { location, current },
-  prefferedTemperatureUnit,
-}) => {
+import { convertTemperature } from '../utils/temperatureUtils';
+const WeatherDisplay = ({ weather: { location, current }, tempUnit }) => {
   const temperatureInCelsius = current?.temp_c;
-  const temperatureUnit = getTemperatureUnit(prefferedTemperatureUnit);
 
-  const convertedTemperature = convertTemperature(
-    temperatureInCelsius,
-    prefferedTemperatureUnit,
-    2
-  );
-  const temperature = `${convertedTemperature} ${temperatureUnit}`;
+  const temperature = convertTemperature({
+    celsius: temperatureInCelsius,
+    scale: tempUnit,
+    decimalPlaces: 2,
+  });
+
   const feelsLikeInCelcius = current?.feelslike_c;
-  const convertedFeelsLike = convertTemperature(
-    feelsLikeInCelcius,
-    prefferedTemperatureUnit,
-    2
-  );
-  const feelsLike = `${convertedFeelsLike} ${temperatureUnit}`;
+  const feelsLike = convertTemperature({
+    celsius: feelsLikeInCelcius,
+    scale: tempUnit,
+    decimalPlaces: 2,
+  });
+
   return (
-    <div className="weather-display" id="weatherDisplay">
-      <div className="current-weather">
-        <div className="content">
-          <CurrentWeather
-            location={location}
-            current={current}
-            temperature={temperature}
-          />
-          <WeatherDetails current={current} feelsLike={feelsLike} />
-        </div>
+    <div className="current-weather">
+      <div className="content">
+        <CurrentWeather
+          location={location}
+          current={current}
+          temperature={temperature}
+        />
+        <WeatherDetails current={current} feelsLike={feelsLike} />
       </div>
     </div>
   );

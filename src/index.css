@@ -103,7 +103,7 @@ body {
   width: 300px;
   justify-content: center;
   align-self: center;
-  margin: 0 auto;
+  margin: 0 auto 30px;
 }
 
 .preference-group {
@@ -429,4 +429,115 @@ body {
   font-weight: 500;
   font-size: 0.875rem;
   color: #667eea;
+}
+
+/* === Dark Mode Overrides === */
+.dashboard.dark-mode {
+  background: linear-gradient(135deg, #121212, #1e1e2e);
+  color: #e0e0e0;
+}
+
+.dashboard.dark-mode .dashboard,
+.dashboard.dark-mode .forecast-section,
+.dashboard.dark-mode .calculations-section,
+.dashboard.dark-mode .previous-searches {
+  background: #1f1f2e;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.dashboard,
+.search-input,
+.search-btn,
+.forecast-item,
+.calculation-item,
+.preference-group,
+.header h1 {
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.dashboard * {
+  transition: all 0.3s ease;
+}
+
+.dashboard.dark-mode .header h1 {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #fff;
+}
+
+.dashboard.dark-mode .search-input {
+  background: #1e1e2e;
+  color: #ffffff;
+  border: 1px solid #333;
+}
+
+.dashboard.dark-mode .search-input:focus {
+  border-color: #8e7cc3;
+  box-shadow: 0 0 0 3px rgba(142, 124, 195, 0.3);
+}
+
+.dashboard.dark-mode .search-btn {
+  background: linear-gradient(135deg, #8e7cc3, #c084fc);
+  color: #121212;
+}
+
+.dashboard.dark-mode .preference-group {
+  background: rgba(142, 124, 195, 0.1);
+}
+
+.dashboard.dark-mode .preference-group label {
+  color: #c084fc;
+}
+
+.dashboard.dark-mode .preference-group select {
+  background: #1e1e2e;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+.dashboard.dark-mode .current-weather {
+  background: linear-gradient(135deg, #8e7cc3, #c084fc);
+  color: #121212;
+}
+
+.dashboard.dark-mode .detail-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dashboard.dark-mode .forecast-item {
+  background: linear-gradient(135deg, #2a2a3a, #1e1e2e);
+}
+
+.dashboard.dark-mode .forecast-day {
+  color: #c084fc;
+}
+
+.dashboard.dark-mode .calc-label {
+  color: #f39c12;
+}
+
+.dashboard.dark-mode .search-tag {
+  background: linear-gradient(135deg, #2a2a3a, #1e1e2e);
+  color: #c084fc;
+  border: 1px solid #444;
+}
+
+.dashboard.dark-mode .error-message {
+  background: linear-gradient(135deg, #ff9999, #cc6666);
+  color: #1e1e2e;
+}
+
+.dashboard.dark-mode .empty-state {
+  color: #999;
+}
+
+.dashboard.dark-mode .date {
+  color: #c084fc;
+}
+
+.dashboard.dark-mode .searches-title,
+.forecast-title,
+.calculations-title {
+  color: #fff;
 }

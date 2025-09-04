@@ -1,0 +1,29 @@
+# Node modules (reinstalled during build)
+node_modules
+
+# Vite build output (copied from builder stage)
+dist
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.swp
+
+

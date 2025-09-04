@@ -15,7 +15,6 @@ const App = () => {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  // const [searchRecent, setSearchRecent] = useState(null);
 
   const handleSearch = e => {
     return setSearch(e.target.value);
@@ -132,6 +131,34 @@ const App = () => {
   };
 
   const today = dayjs().format('dddd, MMM DD YYYY');
+
+  const refreshIntervalRef = useRef(null);
+
+  useEffect(() => {
+    // Clear any existing interval
+    if (refreshIntervalRef.current) {
+      clearInterval(refreshIntervalRef.current);
+    }
+
+    const minutes = parseInt(preferences.autoRefresh, 10);
+    const isValidInterval = !isNaN(minutes) && minutes > 0;
+
+    if (isValidInterval && weather && search.trim()) {
+      refreshIntervalRef.current = setInterval(() => {
+        console.log(`Auto-refreshing weather for "${search}"`);
+        fetchWeatherData(search);
+      }, minutes * 60 * 1000);
+
+      recentSearchRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+    };
+  }, [preferences.autoRefresh, weather, search]);
 
   return (
     <div className={`dashboard ${preferences.theme === 'dark' && 'dark-mode'}`}>
